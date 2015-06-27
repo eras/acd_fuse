@@ -83,6 +83,7 @@ Mount Options
 - `email`: your Amazon Cloud Drive login email
 - `password`: your Amazon Cloud Drive login password
 - `cachefree`: the percentage of free space to maintain on the filecache's file system; *10* by default
+- `tempdir`: the directory where to place temporary files (and sessionstore) instead of /tmp/acd/acd_fuse
 - **NOTE**: All of the (standard fuse mount options)[http://manpages.ubuntu.com/manpages/precise/man8/mount.fuse.8.html#contenttoc3] should work as well, including `allow_other` and `umask`.
 
 License
