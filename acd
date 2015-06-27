@@ -55,17 +55,20 @@ class ACDFS(fuse.Fuse):
         '''
         fuse.Fuse.__init__(self, *args, **kw)
         self.api = pyacd.api
-        self.tempdir = os.path.join(tempfile.gettempdir(), myname)
-        if not os.path.exists(self.tempdir): os.mkdir(self.tempdir)
-        self.sessionfile = os.path.join(self.tempdir, "sessionfile")
 
         # setup logging
         self.log = logging.getLogger(myname)
+
+    def main(self):
+        if not self.tempdir:
+            self.tempdir = os.path.join(tempfile.gettempdir(), myname)
+        if not os.path.exists(self.tempdir): os.mkdir(self.tempdir)
+        self.sessionfile = os.path.join(self.tempdir, "sessionfile")
+
         hdlr = logging.FileHandler(os.path.join(self.tempdir, 'debug.log'))
         self.log.addHandler(hdlr)
         self.log.setLevel(logging.DEBUG)
 
-    def main(self):
         try:
             print "Trying to login from cached sessionfile %s" % self.sessionfile
             with open(self.sessionfile, "rb") as sessfile:
@@ -464,6 +467,8 @@ if __name__ == '__main__':
                          help="PASSWORD password for Amazon Cloud Drive")
     fs.parser.add_option(mountopt="cachefree",
                          help="What percentage of the filecache drive we must keep free (defaults to 10%)")
+    fs.parser.add_option(mountopt="tempdir", metavar="TEMPDIR",
+                         help="TEMPDIR directory to use for temporary files")
 
     fs.parse(values=fs, errex=1)
 
